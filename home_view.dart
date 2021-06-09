@@ -13,8 +13,39 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  double bitcoin = 0.0;
+  double tether = 0.0;
+  double ethereum = 0.0;
+  
   @override
+  void initState() { 
+    getValues();
+    
+  }
+  getValues()async{
+    bitcoin = await getPrice("bitcoin");
+    tether = await getPrice("tether");
+    ethereum = await getPrice("ethereum");
+    setState(() {
+          
+        });
+  }
+  @override
+
   Widget build(BuildContext context) {
+    getValues(String id , double amount)async{
+      if(id=="bitcoin")
+      {
+        return bitcoin*amount;
+      }
+      else if (id=="tether")
+      {
+        return tether*amount;
+      }else{
+        return ethereum*amount;
+      }
+    }
+    
     return Scaffold(
       body:Container(
         width: MediaQuery.of(context).size.width,
@@ -33,7 +64,7 @@ class _HomeViewState extends State<HomeView> {
                  child:Row(
                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                    children: [
-                   Text("Coin Name: ${document.id}"),Text("Amount Owned: ${document.data()['Amount']}")
+                   Text("Coin Name: ${document.id}"),Text("Price: ${getValues(document.id, document.data()['Amount'])}")
                  ],)
                );
              }).toList()
